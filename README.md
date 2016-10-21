@@ -34,6 +34,16 @@ Following variables are available
 | MIN_MOD_FACTOR | 1 | The factor MIN_SHIFT is modified after every commit. |
 | MAX_MOD_FACTOR | 1 | The factor Max_SHIFT is modified after every commit. |
 
+## examples
+
+Here are three example repositories with different settings. You can watch the commit history and commit graph there.
+
+| settings | repository |
+|----------|------------|
+| FIRST_COMMIT_SINCE=15768000 LAST_COMMIT_SINCE=2678400 MIN_MOD_FACTOR=1 MAX_MOD_FACTOR=1.1 | https://github.com/ThomasSteinbach/application01 |
+| FIRST_COMMIT_SINCE=15768000 LAST_COMMIT_SINCE=2678400 MAX_SHIFT='3600' MIN_MOD_LINEAR='+14400' MAX_MOD_LINEAR='+28800' | https://github.com/ThomasSteinbach/application02 |
+| default settings | https://github.com/ThomasSteinbach/application03 |
+
 ## Licence
 
 MIT License
