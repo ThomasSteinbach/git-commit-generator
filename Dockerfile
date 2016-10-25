@@ -6,12 +6,17 @@ RUN apt-get update && \
       git \
       faketime
 
+COPY create-commits.sh /usr/local/bin/create-commits
+COPY commit-messages.txt /usr/local/bin/commit-messages.txt
+RUN chmod +x /usr/local/bin/create-commits
+
+RUN adduser --disabled-password --gecos '' uid1000
+USER uid1000
+
 RUN \
   git config --global user.email "fake@mail.net" && \
   git config --global user.name "Fake Author"
 
-COPY create-commits.sh /root/create-commits.sh
-COPY commit-messages.txt /root/commit-messages.txt
-RUN chmod +x /root/create-commits.sh
+VOLUME /workspace
 
-WORKDIR /root
+WORKDIR /home/uid1000

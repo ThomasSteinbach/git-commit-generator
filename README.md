@@ -9,17 +9,26 @@ Run a bash inside the container. If you want to push the fake repository, you
 will probably mount your .ssh credentials.
 
     docker run -it --rm \
-      -v /home/user/.ssh:/root/.ssh \
+      -v /home/user/.ssh:/home/uid1000/.ssh \
       thomass/git-commit-generator bash
 
-Inside the container execute the `./create-commits.sh`. This will result in a new
-fake repository with fake commits. Enter `git log` to watch them.
+Inside the container execute the `create-commits`. This will result in a new
+fake repository with fake commits. Enter `git log` in the repository directory
+under `/tmp/...` to watch them.
+
+## add initial data
+
+Mount the initial data to the `/workspace` directory inside the container.
+
+    docker run -it --rm \
+      -v /path/to/local/data:/workspace \
+      ...
 
 ## configuration
 
 You can run the script with preceeding environment variables like:
 
-    MIN_MOD_LINEAR='+3600' MAX_MOD_LINEAR='+3600' ./create-commits.sh
+    MIN_MOD_LINEAR='+3600' MAX_MOD_LINEAR='+3600' create-commits
 
 Following variables are available
 
@@ -33,6 +42,35 @@ Following variables are available
 | MAX_MOD_LINEAR | '+0' | The seconds added (+) or removed (-) to/from MAX_SHIFT after every commit. |
 | MIN_MOD_FACTOR | 1 | The factor MIN_SHIFT is modified after every commit. |
 | MAX_MOD_FACTOR | 1 | The factor Max_SHIFT is modified after every commit. |
+
+## variable commits for paths
+
+You can create a different commit behavior for different paths within your repository.
+The paths must exist within the workspace. To do so:
+
+Create a file with two columns separated by semicolon where the first column is
+the path and the second column a value between 0 and 10000:
+
+    /path/to/somewhere;8000
+    /other/path/to/anywhere:4000
+    /third/path/example;9500
+
+Pass this file to the `create-commits` command (behind).
+
+After every commit to the root of the repository a number between 1 and 10000 is
+randomly chosen. If the number in your file behind each path is greater than the
+random number, also a commit to this path is made.
+
+The lower limit can be modified after every turn:
+
+| variable | default | description |
+|----------|---------|-------------|
+| PATH_MOD_LINEAR | 0 | This number is added after each round to the lower limit. |
+| PATH_MOD_FACTOR | 1 | After each round the lower limit is multiplied by this number. |
+
+Example:
+
+    PATH_MOD_FACTOR=1.01 PATH_MOD_LINEAR=3 create-commits /workspace/commit_paths.txt
 
 ## examples
 
