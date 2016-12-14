@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# secconds passed since first commit (default 1 year)
-FIRST_COMMIT_SINCE=${FIRST_COMMIT_SINCE:-31536000}
-# seconds passed since last commit (default 0 / now)
-LAST_COMMIT_SINCE=${LAST_COMMIT_SINCE:-0}
+# default start Sun, 01 May 2016 00:00:00 GMT
+FIRST_COMMIT=${FIRST_COMMIT:-1462060800}
+# default end Mon, 31 Oct 2016 23:59:59 GMT
+LAST_COMMIT=${LAST_COMMIT:-1477958399}
 
 # minimum seconds till next commit (default 10)
 MIN_SHIFT=${MIN_SHIFT:-10}
@@ -26,9 +26,7 @@ CURRENT_TIME=$(date +%s)
 PATH_MIN=1
 
 # time stamp to use for every commit (will be modified in loop)
-FAKE_TIME_STAMP=$(($CURRENT_TIME - $FIRST_COMMIT_SINCE))
-# max time for last commit (condition in loop)
-LAST_COMMIT_TIME=$(($CURRENT_TIME - $LAST_COMMIT_SINCE))
+FAKE_TIME_STAMP=$FIRST_COMMIT
 
 mkdir "/tmp/$CURRENT_TIME"
 cd "/tmp/$CURRENT_TIME"
@@ -38,7 +36,7 @@ git init
 cp -a /workspace/* .
 git add .
 
-while [ $FAKE_TIME_STAMP -lt $LAST_COMMIT_TIME ]
+while [ $FAKE_TIME_STAMP -lt $LAST_COMMIT ]
 do
   FAKE_TIME="$(date -u -d @${FAKE_TIME_STAMP})"
   COMMIT_MSG_LINE=$(shuf -i 1-471 -n 1)

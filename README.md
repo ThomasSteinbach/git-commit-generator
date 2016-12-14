@@ -8,9 +8,7 @@ This is useful, if you need an example repository for scientific research.
 Run a bash inside the container. If you want to push the fake repository, you
 will probably mount your .ssh credentials.
 
-    docker run -it --rm \
-      -v /home/user/.ssh:/home/uid1000/.ssh \
-      thomass/git-commit-generator bash
+    docker run -it --rm -v /home/user/.ssh:/home/uid1000/.ssh thomass/git-commit-generator bash
 
 Inside the container execute the `create-commits`. This will result in a new
 fake repository with fake commits. Enter `git log` in the repository directory
